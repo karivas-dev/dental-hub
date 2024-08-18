@@ -1,0 +1,59 @@
+created:
+    - database/factories/StateFactory.php
+    - database/factories/MunicipalityFactory.php
+    - database/factories/RoleFactory.php
+    - database/factories/ClinicFactory.php
+    - database/factories/BranchFactory.php
+    - database/factories/UserFactory.php
+    - database/factories/PatientFactory.php
+    - database/factories/EmergencyContactFactory.php
+    - database/factories/MedicRecordFactory.php
+    - database/factories/ToothFactory.php
+    - database/factories/ToothRecordFactory.php
+    - database/factories/DentalServiceFactory.php
+    - database/factories/AppointmentFactory.php
+    - database/factories/DiagnosisFactory.php
+    - database/migrations/2024_08_18_033409_create_states_table.php
+    - database/migrations/2024_08_18_033410_create_municipalities_table.php
+    - database/migrations/2024_08_18_033411_create_roles_table.php
+    - database/migrations/2024_08_18_033412_create_clinics_table.php
+    - database/migrations/2024_08_18_033413_create_branches_table.php
+    - database/migrations/2024_08_18_033414_create_users_table.php
+    - database/migrations/2024_08_18_033415_create_patients_table.php
+    - database/migrations/2024_08_18_033416_create_emergency_contacts_table.php
+    - database/migrations/2024_08_18_033417_create_medic_records_table.php
+    - database/migrations/2024_08_18_033418_create_teeth_table.php
+    - database/migrations/2024_08_18_033419_create_tooth_records_table.php
+    - database/migrations/2024_08_18_033420_create_dental_services_table.php
+    - database/migrations/2024_08_18_033421_create_appointments_table.php
+    - database/migrations/2024_08_18_033422_create_diagnoses_table.php
+    - database/migrations/2024_08_18_033423_create_appointment_dental_service_table.php
+    - app/Models/State.php
+    - app/Models/Municipality.php
+    - app/Models/Role.php
+    - app/Models/Clinic.php
+    - app/Models/Branch.php
+    - app/Models/User.php
+    - app/Models/Patient.php
+    - app/Models/EmergencyContact.php
+    - app/Models/MedicRecord.php
+    - app/Models/Tooth.php
+    - app/Models/ToothRecord.php
+    - app/Models/DentalService.php
+    - app/Models/Appointment.php
+    - app/Models/Diagnosis.php
+models:
+    State: { name: string, relationships: { hasMany: Municipality } }
+    Municipality: { name: string, relationships: { belongsTo: State, hasMany: 'Branch, Patient' } }
+    Role: { type: 'string:25', relationships: { hasMany: User } }
+    Clinic: { name: string, softdeletes: softDeletes, relationships: { hasMany: Branch } }
+    Branch: { name: string, main: boolean, address: string, phone: string, email: string, softdeletes: softDeletes, relationships: { belongsTo: 'Clinic, Municipality', hasMany: 'User, Appointment' } }
+    User: { name: string, email: 'string unique', password: string, remember_token: 'string:100 nullable', softdeletes: softDeletes, relationships: { belongsTo: 'Role, Branch', hasMany: Appointment } }
+    Patient: { first_name: string, last_name: string, dui: 'string:9 unique nullable', email: string, genre: 'enum:Femenino,Masculino', phone: string, cellphone: string, address: string, occupation: string, birthdate: date, softdeletes: softDeletes, relationships: { belongsTo: 'Municipality, Clinic', hasMany: 'EmergencyContact, MedicRecord, Appointment, ToothRecord' } }
+    EmergencyContact: { name: string, phone: string, cellphone: string, email: string, kinship: 'enum:Padre,Madre,Hermano/a,Abuelo/a,Tio/a,Primo/a,Sobrino/a,Amigo/a,Otro', softdeletes: softDeletes, relationships: { belongsTo: Patient } }
+    MedicRecord: { date: date, details: string, treatment: 'string nullable', hereditary: boolean, kinship: 'enum:Padre,Madre,Hermano/a,Abuelo/a,Tio/a,Primo/a,Tatara-abuelo/a nullable', system: 'enum:Respiratorio,Cardiovascular,Digestivo,Endocrino,Excretor,Inmunológico,Muscular,Nervioso,Reproductor,Óseo,Circulatorio,Linfático,Tegumentario nullable', softdeletes: softDeletes, relationships: { belongsTo: Patient } }
+    Tooth: { name: string }
+    ToothRecord: { date: date, details: text, relationships: { belongsTo: 'Patient, Tooth' } }
+    DentalService: { name: string, description: string, softdeletes: softDeletes, relationships: { belongsToMany: Appointment } }
+    Appointment: { date: datetime, details: 'string nullable', status: 'enum:Programada,Reagendada,Cancelada,Completada', amount: 'decimal:10,2 nullable', softdeletes: softDeletes, user_id: 'foreign nullable', relationships: { belongsTo: 'Patient, User, Branch', belongsToMany: DentalService, hasMany: Diagnosis } }
+    Diagnosis: { details: text, relationships: { belongsTo: Appointment } }
