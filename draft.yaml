@@ -1,0 +1,101 @@
+models:
+  State:
+    name: string
+
+  Municipality:
+    name: string
+    relationships:
+      belongsTo: State
+
+  Role:
+    type: string:25
+
+  Clinic:
+    name: string
+    deleted_at: timestamp nullable
+
+  Branch:
+    name: string
+    main: boolean
+    address: string
+    phone: string
+    email: string
+    deleted_at: timestamp nullable
+    relationships:
+      belongsTo: Clinic, Municipality
+
+  User:
+    name: string
+    email: string unique
+    password: string
+    remember_token: string:100 nullable
+    deleted_at: timestamp nullable
+    relationships:
+      belongsTo: Role, Branch
+
+  Patient:
+    first_name: string
+    last_name: string
+    dui: string:9 unique nullable
+    email: string
+    genre: enum:Femenino,Masculino
+    phone: string
+    cellphone: string
+    address: string
+    occupation: string
+    birthdate: date
+    deleted_at: timestamp nullable
+    relationships:
+      belongsTo: Municipality, Clinic
+
+  Contact:
+    name: string
+    phone: string
+    cellphone: string
+    email: string
+    kinship: enum:Padre,Madre,Hermano/a,Abuelo/a,Tio/a,Primo/a,Sobrino/a,Amigo/a,Otro
+    deleted_at: timestamp nullable
+    relationships:
+      belongsTo: Patient
+
+  MedicRecord:
+    date: date
+    details: string
+    treatment: string nullable
+    hereditary: boolean
+    kinship: enum:Padre,Madre,Hermano/a,Abuelo/a,Tio/a,Primo/a,Tatara-abuelo/a nullable
+    system:
+      enum:Respiratorio,Cardiovascular,Digestivo,Endocrino,Excretor,Inmunológico,Muscular,Nervioso,Reproductor,Óseo,Circulatorio,Linfático,Tegumentario nullable
+    deleted_at: timestamp nullable
+    relationships:
+      belongsTo: Patient
+
+  Tooth:
+    name: string
+
+  ToothRecord:
+    date: date
+    details: text
+    relationships:
+      belongsTo: Patient, Tooth
+
+  DentalService:
+    name: string
+    description: string
+    deleted_at: timestamp nullable
+
+  Appointment:
+    date: datetime
+    details: string nullable
+    status: enum:Programada,Reagendada,Cancelada,Completada
+    amount: decimal:10,2 nullable
+    deleted_at: timestamp nullable
+    user_id: foreign nullable
+    relationships:
+      belongsTo: Patient, User, Branch
+      belongsToMany: DentalService
+
+  Diagnosis:
+    details: text
+    relationships:
+      belongsTo: Appointment
