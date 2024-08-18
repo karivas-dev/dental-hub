@@ -29,12 +29,14 @@ class AppPanelProvider extends PanelProvider
             ->default()
             ->id('app')
             ->path('/')
+            ->spa()
             ->tenant(Clinic::class)
             ->tenantMenu(false)
             ->tenantMiddleware([
                 ApplyTenantScopes::class,
                 ApplyTenantEvents::class,
             ], isPersistent: true)
+            ->unsavedChangesAlerts()
             ->login()
             ->colors([
                 'primary' => Color::Amber,
