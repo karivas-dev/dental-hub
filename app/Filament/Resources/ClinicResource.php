@@ -86,6 +86,7 @@ class ClinicResource extends Resource
             'view' => Pages\ViewClinic::route('/{record}'),
             'edit' => Pages\EditClinic::route('/{record}/edit'),
             'branches' => Pages\ManageClinicBranches::route('/{record}/branches'),
+            'users' => Pages\ManageClinicUsers::route('/{record}/users'),
         ];
     }
 
@@ -95,6 +96,7 @@ class ClinicResource extends Resource
             Pages\ViewClinic::class,
             Pages\EditClinic::class,
             Pages\ManageClinicBranches::class,
+            Pages\ManageClinicUsers::class,
         ]);
     }
 }
