@@ -30,9 +30,9 @@ class Clinic extends Model
         'id' => 'integer',
     ];
 
-    public function branches(): HasMany
+    public function patients(): HasMany
     {
-        return $this->hasMany(Branch::class);
+        return $this->hasMany(Patient::class);
     }
 
     public function users(): HasManyThrough
@@ -40,4 +40,8 @@ class Clinic extends Model
         return $this->hasManyThrough(User::class, Branch::class);
     }
 
+    public function branches(): HasMany
+    {
+        return $this->hasMany(Branch::class);
+    }
 }
