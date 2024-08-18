@@ -17,6 +17,10 @@ class ApplyTenantEvents
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::user()->admin) {
+            User::creating(function (User $user) {
+                $user->branch()->associate(Auth::user()->branch);
+            });
+
             return $next($request);
         }
 

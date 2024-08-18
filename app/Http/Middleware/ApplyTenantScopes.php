@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use App\Models\Appointment;
 use App\Models\Branch;
-use App\Models\Clinic;
 use App\Models\Diagnosis;
 use App\Models\EmergencyContact;
 use App\Models\MedicRecord;
@@ -23,8 +22,6 @@ class ApplyTenantScopes
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::user()->admin) {
-            Clinic::addGlobalScope(fn(Builder $query) => $query->whereNot('id', 1));
-
             return $next($request);
         }
 

@@ -66,7 +66,7 @@ class User extends Authenticatable implements HasTenants
 
     public function canAccessTenant(Model $tenant): bool
     {
-        return $this->clinic->is($tenant);
+        return $this->admin || $this->clinic->is($tenant);
     }
 
     public function getTenants(Panel $panel): array|Collection
