@@ -32,6 +32,7 @@ class User extends Authenticatable implements HasTenants
         'password',
         'role_id',
         'branch_id',
+        'admin',
     ];
 
     /**
