@@ -1,18 +1,25 @@
 models:
   State:
     name: string
+    relationships:
+      hasMany: Municipality
 
   Municipality:
     name: string
     relationships:
       belongsTo: State
+      hasMany: Branch, Patient
 
   Role:
     type: string:25
+    relationships:
+      hasMany: User
 
   Clinic:
     name: string
-    deleted_at: timestamp nullable
+    softDeletes: true
+    relationships:
+      hasMany: Branch
 
   Branch:
     name: string
@@ -20,18 +27,20 @@ models:
     address: string
     phone: string
     email: string
-    deleted_at: timestamp nullable
+    softDeletes: true
     relationships:
       belongsTo: Clinic, Municipality
+      hasMany: User, Appointment
 
   User:
     name: string
     email: string unique
     password: string
     remember_token: string:100 nullable
-    deleted_at: timestamp nullable
+    softDeletes: true
     relationships:
       belongsTo: Role, Branch
+      hasMany: Appointment
 
   Patient:
     first_name: string
@@ -44,17 +53,18 @@ models:
     address: string
     occupation: string
     birthdate: date
-    deleted_at: timestamp nullable
+    softDeletes: true
     relationships:
       belongsTo: Municipality, Clinic
+      hasMany: EmergencyContact, MedicRecord, Appointment, ToothRecord
 
-  Contact:
+  EmergencyContact:
     name: string
     phone: string
     cellphone: string
     email: string
     kinship: enum:Padre,Madre,Hermano/a,Abuelo/a,Tio/a,Primo/a,Sobrino/a,Amigo/a,Otro
-    deleted_at: timestamp nullable
+    softDeletes: true
     relationships:
       belongsTo: Patient
 
@@ -66,7 +76,7 @@ models:
     kinship: enum:Padre,Madre,Hermano/a,Abuelo/a,Tio/a,Primo/a,Tatara-abuelo/a nullable
     system:
       enum:Respiratorio,Cardiovascular,Digestivo,Endocrino,Excretor,Inmunológico,Muscular,Nervioso,Reproductor,Óseo,Circulatorio,Linfático,Tegumentario nullable
-    deleted_at: timestamp nullable
+    softDeletes: true
     relationships:
       belongsTo: Patient
 
@@ -82,18 +92,21 @@ models:
   DentalService:
     name: string
     description: string
-    deleted_at: timestamp nullable
+    softDeletes: true
+    relationships:
+      belongsToMany: Appointment
 
   Appointment:
     date: datetime
     details: string nullable
     status: enum:Programada,Reagendada,Cancelada,Completada
     amount: decimal:10,2 nullable
-    deleted_at: timestamp nullable
+    softDeletes: true
     user_id: foreign nullable
     relationships:
       belongsTo: Patient, User, Branch
       belongsToMany: DentalService
+      hasMany: Diagnosis
 
   Diagnosis:
     details: text
