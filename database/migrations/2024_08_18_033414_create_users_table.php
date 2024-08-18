@@ -17,9 +17,10 @@ return new class extends Migration {
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->boolean('admin')->default(false);
             $table->string('remember_token', 100)->nullable();
             $table->foreignIdFor(Role::class)->constrained();
-            $table->foreignIdFor(Branch::class)->constrained();
+            $table->foreignIdFor(Branch::class)->nullable()->constrained();
             $table->timestamps();
             $table->softDeletes();
         });

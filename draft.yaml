@@ -36,6 +36,8 @@ models:
     name: string
     email: string unique
     password: string
+    admin: boolean
+    branch_id: foreign nullable
     remember_token: string:100 nullable
     softDeletes: true
     relationships:

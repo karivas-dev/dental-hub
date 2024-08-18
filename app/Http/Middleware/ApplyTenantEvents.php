@@ -16,6 +16,10 @@ class ApplyTenantEvents
 {
     public function handle(Request $request, Closure $next): Response
     {
+        if (Auth::user()->admin) {
+            return $next($request);
+        }
+
         Branch::creating(function (Branch $branch) {
             $branch->clinic()->associate(Filament::getTenant());
         });
