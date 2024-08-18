@@ -44,4 +44,9 @@ class Clinic extends Model
     {
         return $this->hasMany(Branch::class);
     }
+
+    public function appointments(): HasManyThrough
+    {
+        return $this->hasManyThrough(Appointment::class, Branch::class);
+    }
 }

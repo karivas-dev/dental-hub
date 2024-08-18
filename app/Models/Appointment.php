@@ -9,10 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Znck\Eloquent\Relations\BelongsToThrough;
+use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
+
 
 class Appointment extends Model
 {
     use HasFactory, SoftDeletes;
+    use BelongsToThroughTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -67,5 +71,10 @@ class Appointment extends Model
     public function diagnoses(): HasMany
     {
         return $this->hasMany(Diagnosis::class);
+    }
+
+    public function clinic(): BelongsToThrough
+    {
+        return $this->belongsToThrough(Clinic::class, Branch::class);
     }
 }
