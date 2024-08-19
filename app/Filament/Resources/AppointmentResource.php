@@ -4,9 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Enums\AppointmentStatus;
 use App\Filament\Resources\AppointmentResource\Pages;
-use App\Filament\Resources\AppointmentResource\RelationManagers;
+use App\Filament\Traits\TrashedFilterActive;
 use App\Models\Appointment;
 use App\Models\Patient;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
@@ -16,10 +17,11 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\App;
 
 class AppointmentResource extends Resource
 {
+    use TrashedFilterActive;
+
     protected static ?string $model = Appointment::class;
 
     protected static ?string $navigationIcon = 'fluentui-document-text-clock-20-o';
@@ -31,7 +33,8 @@ class AppointmentResource extends Resource
         return $form
             ->schema([
                 Forms\Components\DateTimePicker::make('date')
-                    ->required(),
+                    ->required()
+                    ->after('now'),
                 Forms\Components\TextInput::make('details'),
                 Forms\Components\Select::make('status')
                     ->options(AppointmentStatus::options())
@@ -42,12 +45,14 @@ class AppointmentResource extends Resource
                     ->rules(['min:0'])
                     ->requiredIf('status', AppointmentStatus::Completada->value),
                 Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name', modifyQueryUsing: fn ($query) => $query->whereRelation('role', 'type', 'Doctor'))
+                    ->relationship('user', 'name', modifyQueryUsing: fn ($query) => $query->whereRelation('role', 'type',
+                        'Doctor'))
                     ->label('Doctor'),
                 Forms\Components\Select::make('patient_id')
                     ->relationship('patient')
-                    ->getOptionLabelFromRecordUsing(fn (Patient $patient) => "{$patient->first_name} {$patient->last_name} - {$patient->email}")
-                    ->searchable([ 'first_name', 'last_name' , 'email'])
+                    ->getOptionLabelFromRecordUsing(fn (Patient $patient
+                    ) => "$patient->first_name $patient->last_name - $patient->email")
+                    ->searchable(['first_name', 'last_name', 'email'])
                     ->required(),
             ]);
     }
@@ -64,17 +69,18 @@ class AppointmentResource extends Resource
                 Tables\Columns\TextColumn::make('status')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('amount')
-                    ->numeric()
-                    ->sortable(),
+                    ->money(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('patient.id')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('patient')
+                    ->getStateUsing(fn (Appointment $appointment
+                    ) => "{$appointment->patient->first_name} {$appointment->patient->last_name}"),
                 Tables\Columns\TextColumn::make('branch.name')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->visible(fn () => Filament::getTenant()->main),
+                self::isActiveBooleanColumn($table),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -98,7 +104,6 @@ class AppointmentResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
@@ -128,6 +133,7 @@ class AppointmentResource extends Resource
             Pages\EditAppointment::class,
         ]);
     }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
