@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ClinicResource\Pages;
 
 use App\Filament\Resources\ClinicResource;
+use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditClinic extends EditRecord
@@ -14,11 +15,12 @@ class EditClinic extends EditRecord
         return $this->getResource()::getUrl('view', ['record' => $this->record]);
     }
 
-//    protected function getHeaderActions(): array
-//    {
-//        return [
-//            Actions\ViewAction::make(),
-//            Actions\DeleteAction::make(),
-//        ];
-//    }
+    protected function getHeaderActions(): array
+    {
+        return [
+            //Actions\ViewAction::make(),
+            Actions\DeleteAction::make(),
+            Actions\RestoreAction::make(),
+        ];
+    }
 }

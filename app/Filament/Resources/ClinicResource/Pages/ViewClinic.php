@@ -9,10 +9,10 @@ class ViewClinic extends ViewRecord
 {
     protected static string $resource = ClinicResource::class;
 
-//    protected function getHeaderActions(): array
-//    {
-//        return [
-//            Actions\EditAction::make(),
-//        ];
-//    }
+    protected function getHeaderActions(): array
+    {
+        return [
+            //Actions\EditAction::make(),
+        ];
+    }
 }
