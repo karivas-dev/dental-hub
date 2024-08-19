@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
+use App\Filament\Traits\TrashedFilterActive;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -13,10 +13,11 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
-use Filament\Facades\Filament;
 
 class UserResource extends Resource
 {
+    use TrashedFilterActive;
+
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
@@ -32,7 +33,9 @@ class UserResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('password')
                     ->password()
-                    ->required(),
+                    ->nullable()
+                    ->required($form->getOperation() === 'create')
+                    ->dehydrated(fn($state) => ! empty($state)),
                 Forms\Components\Select::make('role_id')
                     ->relationship('role', 'type')
                     ->required()
@@ -42,7 +45,7 @@ class UserResource extends Resource
                     ->relationship('branch', 'name')
                     ->required()
                     ->key('branch')
-                    ->visible(fn () => Auth::user()->branch->main),
+                    ->visible(fn() => Auth::user()->branch->main),
             ]);
     }
 
@@ -61,7 +64,8 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('branch.name')
                     ->numeric()
                     ->sortable()
-                    ->visible(fn () => Auth::user()->branch->main),
+                    ->visible(fn() => Auth::user()->branch->main),
+                self::isActiveBooleanColumn($table),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -76,7 +80,7 @@ class UserResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -84,13 +88,21 @@ class UserResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->modifyQueryUsing(fn(Builder $query) => $query->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]));
     }
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('admin', true);
+        return parent::getEloquentQuery()->when(Auth::user()->admin, function ($query) {
+            return $query->where('admin', true);
+        })->withoutGlobalScopes([
+            SoftDeletingScope::class,
+        ]);
     }
 
     public static function getRelations(): array
