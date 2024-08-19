@@ -36,8 +36,15 @@ class AppointmentResource extends Resource
                     ->required()
                     ->after('now'),
                 Forms\Components\TextInput::make('details'),
-                Forms\Components\Select::make('status')
+                Forms\Components\ToggleButtons::make('status')
                     ->options(AppointmentStatus::options())
+                    ->icons([
+                        AppointmentStatus::Programada->value => 'heroicon-o-clock',
+                        AppointmentStatus::Reagendada->value => 'tabler-clock-exclamation',
+                        AppointmentStatus::Cancelada->value => 'heroicon-o-x-mark',
+                        AppointmentStatus::Completada->value => 'heroicon-o-check-circle',
+                    ])
+                    ->inline()
                     ->enum(AppointmentStatus::class)
                     ->required(),
                 Forms\Components\TextInput::make('amount')
@@ -45,12 +52,12 @@ class AppointmentResource extends Resource
                     ->rules(['min:0'])
                     ->requiredIf('status', AppointmentStatus::Completada->value),
                 Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name', modifyQueryUsing: fn ($query) => $query->whereRelation('role', 'type',
+                    ->relationship('user', 'name', modifyQueryUsing: fn($query) => $query->whereRelation('role', 'type',
                         'Doctor'))
                     ->label('Doctor'),
                 Forms\Components\Select::make('patient_id')
                     ->relationship('patient')
-                    ->getOptionLabelFromRecordUsing(fn (Patient $patient
+                    ->getOptionLabelFromRecordUsing(fn(Patient $patient
                     ) => "$patient->first_name $patient->last_name - $patient->email")
                     ->searchable(['first_name', 'last_name', 'email'])
                     ->required(),
@@ -74,12 +81,12 @@ class AppointmentResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('patient')
-                    ->getStateUsing(fn (Appointment $appointment
+                    ->getStateUsing(fn(Appointment $appointment
                     ) => "{$appointment->patient->first_name} {$appointment->patient->last_name}"),
                 Tables\Columns\TextColumn::make('branch.name')
                     ->numeric()
                     ->sortable()
-                    ->visible(fn () => Filament::getTenant()->main),
+                    ->visible(fn() => Filament::getTenant()->main),
                 self::isActiveBooleanColumn($table),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
