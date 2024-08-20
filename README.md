@@ -1,17 +1,17 @@
 # Dental Hub
  
 ### `Desarrollo de Software Empresarial` DES104 Y DSE104 G02T
-
+### Equipo #3
 ---
 
 ### **Presentado por:**
-| Apellido | Nombre |
-| -- | -- |
-| Alvarenga Romero | Josías |
-| Bonilla Elias | Luis |              
-| Gómez Castro | Diego |
-| Fernández Cotto | Alfonso |
-| Rivas Rivas | Karen |   
+| Apellido | Nombre | Carnet | Grupo teórico |
+| -- | -- | -- | -- |
+| Alvarenga Romero | Josías | #AR200778 | DSE104 |
+| Bonilla Elias | Luis | #BE202156 | DSE104 |              
+| Gómez Castro | Diego | #GC201085 | DES104 |
+| Fernández Cotto | Alfonso | #FC200910 | DSE104 |
+| Rivas Rivas | Karen | #RR201098 | DES104 |
 
 ---
 
