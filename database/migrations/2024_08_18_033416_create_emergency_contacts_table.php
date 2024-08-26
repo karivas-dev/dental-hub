@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('cellphone');
             $table->string('email');
-            $table->enum('kinship', ['Padre', 'Madre', "Hermano\/a", "Abuelo\/a", "Tio\/a", "Primo\/a", "Sobrino\/a", "Amigo\/a", 'Otro']);
+            $table->enum('kinship', ['Padre', 'Madre', "Hermano/a", "Abuelo/a", "Tio/a", "Primo/a", "Sobrino/a", "Amigo/a", 'Otro']);
             $table->foreignIdFor(Patient::class)->constrained();
             $table->timestamps();
             $table->softDeletes();

@@ -69,7 +69,7 @@ class BranchResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                self::isActiveBooleanColumn($table),
+                self::isDeletedBooleanColumn($table),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

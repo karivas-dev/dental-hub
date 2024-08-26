@@ -80,7 +80,7 @@ class AppointmentResource extends Resource
                     ->numeric()
                     ->sortable()
                     ->visible(fn () => Filament::getTenant()->main),
-                self::isActiveBooleanColumn($table),
+                self::isDeletedBooleanColumn($table),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

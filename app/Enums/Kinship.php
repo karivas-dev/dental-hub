@@ -4,6 +4,8 @@ namespace App\Enums;
 
 enum Kinship: string
 {
+    use CasesAsOptions;
+
     case Padre = 'Padre';
     case Madre = 'Madre';
     case Hermano_a = 'Hermano/a';

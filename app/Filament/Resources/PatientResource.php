@@ -95,7 +95,7 @@ class PatientResource extends Resource
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                self::isActiveBooleanColumn($table),
+                self::isDeletedBooleanColumn($table),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -149,6 +149,7 @@ class PatientResource extends Resource
             'create' => Pages\CreatePatient::route('/create'),
             'view' => Pages\ViewPatient::route('/{record}'),
             'edit' => Pages\EditPatient::route('/{record}/edit'),
+            'emergencyContacts' => Pages\ManageEmergencyContacts::route('/{record}/emergencyContacts'),
         ];
     }
 
@@ -157,6 +158,7 @@ class PatientResource extends Resource
         return $page->generateNavigationItems([
             Pages\ViewPatient::class,
             Pages\EditPatient::class,
+            Pages\ManageEmergencyContacts::class,
         ]);
     }
 }
