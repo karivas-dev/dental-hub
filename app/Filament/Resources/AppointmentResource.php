@@ -86,8 +86,8 @@ class AppointmentResource extends Resource
                 Tables\Columns\TextColumn::make('branch.name')
                     ->numeric()
                     ->sortable()
-                    ->visible(fn() => Filament::getTenant()->main),
-                self::isActiveBooleanColumn($table),
+                    ->visible(fn () => Filament::getTenant()->main),
+                self::isDeletedBooleanColumn($table),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

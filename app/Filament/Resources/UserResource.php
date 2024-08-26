@@ -65,7 +65,7 @@ class UserResource extends Resource
                     ->numeric()
                     ->sortable()
                     ->visible(fn() => Auth::user()->branch->main),
-                self::isActiveBooleanColumn($table),
+                self::isDeletedBooleanColumn($table),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

@@ -2,18 +2,18 @@
 
 namespace App\Filament\Traits;
 
-use App\Models\Branch;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 trait TrashedFilterActive
 {
-    public static function isActiveBooleanColumn($table): Tables\Columns\IconColumn
+    public static function isDeletedBooleanColumn($table): Tables\Columns\IconColumn
     {
-        return Tables\Columns\IconColumn::make('deleted')
+        return Tables\Columns\IconColumn::make('active')
             ->boolean()
             ->alignCenter()
-            ->getStateUsing(fn(Branch $branch) => $branch->trashed())
+            ->getStateUsing(fn(Model $model) => !$model->trashed())
             ->visible(fn() => self::trashedFilterActive($table));
     }
 
