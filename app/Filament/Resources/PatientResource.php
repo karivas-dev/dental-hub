@@ -150,6 +150,7 @@ class PatientResource extends Resource
             'view' => Pages\ViewPatient::route('/{record}'),
             'edit' => Pages\EditPatient::route('/{record}/edit'),
             'emergencyContacts' => Pages\ManageEmergencyContacts::route('/{record}/emergencyContacts'),
+            'medicRecords' => Pages\ManageMedicRecords::route('/{record}/medicRecords'),
         ];
     }
 
@@ -159,6 +160,7 @@ class PatientResource extends Resource
             Pages\ViewPatient::class,
             Pages\EditPatient::class,
             Pages\ManageEmergencyContacts::class,
+            Pages\ManageMedicRecords::class,
         ]);
     }
 }

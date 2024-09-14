@@ -4,6 +4,7 @@ namespace App\Enums;
 
 enum System: string
 {
+    use CasesAsOptions;
     case Respiratorio = 'Respiratorio';
     case Cardiovascular = 'Cardiovascular';
     case Digestivo = 'Digestivo';
