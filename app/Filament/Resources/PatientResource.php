@@ -151,6 +151,7 @@ class PatientResource extends Resource
             'edit' => Pages\EditPatient::route('/{record}/edit'),
             'emergencyContacts' => Pages\ManageEmergencyContacts::route('/{record}/emergencyContacts'),
             'medicRecords' => Pages\ManageMedicRecords::route('/{record}/medicRecords'),
+            'toothRecords' => Pages\ManageToothRecords::route('/{record}/toothRecords')
         ];
     }
 
@@ -161,6 +162,7 @@ class PatientResource extends Resource
             Pages\EditPatient::class,
             Pages\ManageEmergencyContacts::class,
             Pages\ManageMedicRecords::class,
+            Pages\ManageToothRecords::class
         ]);
     }
 }
