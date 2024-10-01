@@ -13,6 +13,7 @@
         "itsgoingd/clockwork": "^5.2",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
+        "maggomann/filament-model-translator": "^1.1",
         "ryangjchandler/blade-tabler-icons": "^2.3",
         "staudenmeir/belongs-to-through": "^2.16"
     },

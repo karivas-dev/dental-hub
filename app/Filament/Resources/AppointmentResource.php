@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\AppointmentStatus;
 use App\Filament\Resources\AppointmentResource\Pages;
 use App\Filament\Traits\TrashedFilterActive;
+use App\Helpers\TranslatableAttributes;
 use App\Models\Appointment;
 use App\Models\Patient;
 use Filament\Facades\Filament;
@@ -17,10 +18,14 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Maggomann\FilamentModelTranslator\Traits\HasTranslateableResources;
+use Maggomann\FilamentModelTranslator\Contracts\Translateable;
 
-class AppointmentResource extends Resource
+class AppointmentResource extends Resource implements Translateable
 {
-    use TrashedFilterActive;
+    use TrashedFilterActive, HasTranslateableResources;
+
+    protected static ?string $translateablePackageKey = '';
 
     protected static ?string $model = Appointment::class;
 
@@ -31,7 +36,7 @@ class AppointmentResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
+            ->schema(TranslatableAttributes::translateLabels(self::$model, [
                 Forms\Components\DateTimePicker::make('date')
                     ->required()
                     ->after('now'),
@@ -40,7 +45,7 @@ class AppointmentResource extends Resource
                     ->options(AppointmentStatus::options())
                     ->icons([
                         AppointmentStatus::Programada->value => 'heroicon-o-clock',
-                        AppointmentStatus::Reagendada->value => 'tabler-clock-exclamation',
+                        AppointmentStatus::Reagendada->value => 'heroicon-o-exclamation-circle',
                         AppointmentStatus::Cancelada->value => 'heroicon-o-x-mark',
                         AppointmentStatus::Completada->value => 'heroicon-o-check-circle',
                     ])
@@ -61,13 +66,13 @@ class AppointmentResource extends Resource
                     ) => "$patient->first_name $patient->last_name - $patient->email")
                     ->searchable(['first_name', 'last_name', 'email'])
                     ->required(),
-            ]);
+            ]));
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
+            ->columns(TranslatableAttributes::translateLabels(self::$model, [
                 Tables\Columns\TextColumn::make('date')
                     ->dateTime()
                     ->sortable(),
@@ -100,7 +105,7 @@ class AppointmentResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            ]))
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])

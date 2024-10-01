@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Traits\TrashedFilterActive;
+use App\Helpers\TranslatableAttributes;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -13,10 +14,14 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use Maggomann\FilamentModelTranslator\Contracts\Translateable;
+use Maggomann\FilamentModelTranslator\Traits\HasTranslateableResources;
 
-class UserResource extends Resource
+class UserResource extends Resource IMPLEMENTS Translateable
 {
-    use TrashedFilterActive;
+    use TrashedFilterActive, HasTranslateableResources;
+
+    protected static ?string $translateablePackageKey = '';
 
     protected static ?string $model = User::class;
 
@@ -25,7 +30,7 @@ class UserResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
+            ->schema(TranslatableAttributes::translateLabels(self::$model, [
                 Forms\Components\TextInput::make('name')
                     ->required(),
                 Forms\Components\TextInput::make('email')
@@ -46,13 +51,13 @@ class UserResource extends Resource
                     ->required()
                     ->key('branch')
                     ->visible(fn() => Auth::user()->branch->main),
-            ]);
+            ]));
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
+            ->columns(TranslatableAttributes::translateLabels(self::$model, [
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
@@ -78,7 +83,7 @@ class UserResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            ]))
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])

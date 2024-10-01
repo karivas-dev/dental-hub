@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\Genre;
 use App\Filament\Resources\PatientResource\Pages;
 use App\Filament\Traits\TrashedFilterActive;
+use App\Helpers\TranslatableAttributes;
 use App\Models\Patient;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -15,10 +16,14 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Maggomann\FilamentModelTranslator\Traits\HasTranslateableResources;
+use Maggomann\FilamentModelTranslator\Contracts\Translateable;
 
-class PatientResource extends Resource
+class PatientResource extends Resource implements Translateable
 {
-    use TrashedFilterActive;
+    use TrashedFilterActive, HasTranslateableResources;
+
+    protected static ?string $translateablePackageKey = '';
 
     protected static ?string $model = Patient::class;
 
@@ -29,12 +34,13 @@ class PatientResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
+            ->schema(TranslatableAttributes::translateLabels(self::$model, [
                 Forms\Components\TextInput::make('first_name')
                     ->required(),
                 Forms\Components\TextInput::make('last_name')
                     ->required(),
-                Forms\Components\TextInput::make('dui'),
+                Forms\Components\TextInput::make('dui')
+                    ->unique(),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required(),
@@ -57,14 +63,13 @@ class PatientResource extends Resource
                 Forms\Components\Select::make('municipality_id')
                     ->relationship('municipality', 'name')
                     ->required(),
-
-            ]);
+            ]));
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
+            ->columns(TranslatableAttributes::translateLabels(self::$model, [
                 Tables\Columns\TextColumn::make('first_name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('last_name')
@@ -108,7 +113,7 @@ class PatientResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            ]))
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])

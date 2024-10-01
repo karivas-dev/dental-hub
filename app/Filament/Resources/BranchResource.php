@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\BranchResource\Pages;
 use App\Filament\Resources\BranchResource\RelationManagers;
 use App\Filament\Traits\TrashedFilterActive;
+use App\Helpers\TranslatableAttributes;
 use App\Models\Branch;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -14,10 +15,14 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use Maggomann\FilamentModelTranslator\Contracts\Translateable;
+use Maggomann\FilamentModelTranslator\Traits\HasTranslateableResources;
 
-class BranchResource extends Resource
+class BranchResource extends Resource implements Translateable
 {
-    use TrashedFilterActive;
+    use TrashedFilterActive, HasTranslateableResources;
+
+    protected static ?string $translateablePackageKey = '';
 
     protected static ?string $model = Branch::class;
 
@@ -31,7 +36,7 @@ class BranchResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
+            ->schema(TranslatableAttributes::translateLabels(self::$model, [
                 Forms\Components\TextInput::make('name')
                     ->required(),
                 Forms\Components\Toggle::make('main')
@@ -47,13 +52,13 @@ class BranchResource extends Resource
                 Forms\Components\Select::make('municipality_id')
                     ->relationship('municipality', 'name')
                     ->required(),
-            ]);
+            ]));
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
+            ->columns(TranslatableAttributes::translateLabels(self::$model, [
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\IconColumn::make('main')
@@ -82,7 +87,7 @@ class BranchResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            ]))
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])

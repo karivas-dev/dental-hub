@@ -8,6 +8,8 @@ use Filament\Resources\Pages\EditRecord;
 
 class EditPatient extends EditRecord
 {
+    public ?string $heading = 'Detalles del paciente';
+
     protected static string $resource = PatientResource::class;
 
     protected function getHeaderActions(): array

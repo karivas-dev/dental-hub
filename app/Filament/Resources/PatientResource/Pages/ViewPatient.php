@@ -9,6 +9,8 @@ class ViewPatient extends ViewRecord
 {
     protected static string $resource = PatientResource::class;
 
+    public ?string $heading = 'Detalles del paciente';
+
     protected function getHeaderActions(): array
     {
         return [

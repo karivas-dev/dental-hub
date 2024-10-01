@@ -18,6 +18,8 @@ class ClinicResource extends Resource
 {
     protected static ?string $model = Clinic::class;
 
+    protected static ?string $label = 'Clínicas';
+
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
 
     protected static bool $isScopedToTenant = false;

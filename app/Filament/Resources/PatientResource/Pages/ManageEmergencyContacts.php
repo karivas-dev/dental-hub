@@ -27,8 +27,10 @@ class ManageEmergencyContacts extends ManageRelatedRecords
 
     public static function getNavigationLabel(): string
     {
-        return 'Emergency Contacts';
+        return 'Contactos de emergencia';
     }
+
+    public ?string $heading = 'Contactos del paciente';
 
     public function form(Form $form): Form
     {

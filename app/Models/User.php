@@ -13,13 +13,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use Maggomann\FilamentModelTranslator\Traits\HasTranslateableModel;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 
 class User extends Authenticatable implements HasTenants
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, HasTranslateableModel;
     use BelongsToThroughTrait;
+
+    protected static ?string $translateablePackageKey = '';
 
     /**
      * The attributes that are mass assignable.
