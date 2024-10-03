@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Maggomann\FilamentModelTranslator\Traits\HasTranslateableModel;
 
 class DentalService extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasTranslateableModel;
 
+    protected static ?string $translateablePackageKey = '';
+    
     /**
      * The attributes that are mass assignable.
      *

@@ -61,6 +61,9 @@ return [
             'name' => 'Nombre',
             'description' => 'Descripción',
             'price' => 'Precio',
+            'pivot' => [
+                'quantity' => 'Cantidad',
+            ],
         ],
         'diagnosis' => [
             'name' => 'Nombre',
