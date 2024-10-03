@@ -32,6 +32,6 @@ class DentalService extends Model
 
     public function appointments(): BelongsToMany
     {
-        return $this->belongsToMany(Appointment::class);
+        return $this->belongsToMany(Appointment::class)->withPivot('quantity');
     }
 }

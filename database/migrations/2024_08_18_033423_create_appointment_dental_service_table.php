@@ -17,6 +17,7 @@ return new class extends Migration {
         Schema::create('appointment_dental_service', function (Blueprint $table) {
             $table->foreignIdFor(Appointment::class)->constrained();
             $table->foreignIdFor(DentalService::class)->constrained();
+            $table->integer('quantity')->default(1);
         });
 
         Schema::enableForeignKeyConstraints();

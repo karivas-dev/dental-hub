@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Enums\AppointmentStatus;
 use App\Filament\Resources\AppointmentResource\Pages;
+use App\Filament\Resources\AppointmentResource\RelationManagers\DentalServicesRelationManager;
 use App\Filament\Traits\TrashedFilterActive;
 use App\Helpers\TranslatableAttributes;
 use App\Models\Appointment;
@@ -12,18 +13,17 @@ use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
-use Filament\Resources\Pages\Page;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Maggomann\FilamentModelTranslator\Traits\HasTranslateableResources;
 use Maggomann\FilamentModelTranslator\Contracts\Translateable;
+use Maggomann\FilamentModelTranslator\Traits\HasTranslateableResources;
 
 class AppointmentResource extends Resource implements Translateable
 {
-    use TrashedFilterActive, HasTranslateableResources;
+    use HasTranslateableResources, TrashedFilterActive;
 
     protected static ?string $translateablePackageKey = '';
 
@@ -91,7 +91,7 @@ class AppointmentResource extends Resource implements Translateable
                 Tables\Columns\TextColumn::make('branch.name')
                     ->numeric()
                     ->sortable()
-                    ->visible(fn () => Filament::getTenant()->main),
+                    ->visible(fn() => Filament::getTenant()->main),
                 self::isDeletedBooleanColumn($table),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -110,7 +110,7 @@ class AppointmentResource extends Resource implements Translateable
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                //Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -124,7 +124,7 @@ class AppointmentResource extends Resource implements Translateable
     public static function getRelations(): array
     {
         return [
-            //
+            DentalServicesRelationManager::class,
         ];
     }
 
@@ -133,17 +133,9 @@ class AppointmentResource extends Resource implements Translateable
         return [
             'index' => Pages\ListAppointments::route('/'),
             'create' => Pages\CreateAppointment::route('/create'),
-            'view' => Pages\ViewAppointment::route('/{record}'),
+            //'view' => Pages\ViewAppointment::route('/{record}'),
             'edit' => Pages\EditAppointment::route('/{record}/edit'),
         ];
-    }
-
-    public static function getRecordSubNavigation(Page $page): array
-    {
-        return $page->generateNavigationItems([
-            Pages\ViewAppointment::class,
-            Pages\EditAppointment::class,
-        ]);
     }
 
     public static function getEloquentQuery(): Builder
