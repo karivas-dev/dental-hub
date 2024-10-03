@@ -36,6 +36,7 @@ return [
             'created_at' => 'Fecha de registro',
             'updated_at' => 'Fecha de actualización',
             'deleted_at' => 'Fecha de eliminación',
+            'active' => 'Activa',
         ],
         'branch' => [
             'name' => 'Nombre',
@@ -50,12 +51,14 @@ return [
             'created_at' => 'Fecha de registro',
             'updated_at' => 'Fecha de actualización',
             'deleted_at' => 'Fecha de eliminación',
+            'active' => 'Activa',
         ],
         'clinic' => [
             'name' => 'Nombre',
             'address' => 'Dirección',
             'phone' => 'Teléfono',
             'municipality_id' => 'Municipio',
+            'active' => 'Activa',
         ],
         'dental_service' => [
             'name' => 'Nombre',
@@ -72,13 +75,27 @@ return [
         'emergency_contact' => [
             'name' => 'Nombre',
             'phone' => 'Teléfono',
+            'cellphone' => 'Celular',
             'patient_id' => 'Paciente',
+            'email' => 'Correo electrónico',
+            'kinship' => 'Parentesco',
+            'created_at' => 'Fecha de registro',
+            'updated_at' => 'Fecha de actualización',
+            'deleted_at' => 'Fecha de eliminación',
         ],
         'medic_record' => [
             'date' => 'Fecha',
             'description' => 'Descripción',
             'patient_id' => 'Paciente',
             'user_id' => 'Doctor',
+            'system' => 'Sistema',
+            'hereditary' => 'Hereditario',
+            'treatment' => 'Tratamiento',
+            'details' => 'Detalles',
+            'kinship' => 'Parentesco',
+            'created_at' => 'Fecha de registro',
+            'updated_at' => 'Fecha de actualización',
+            'deleted_at' => 'Fecha de eliminación',
         ],
         'municipality' => [
             'name' => 'Nombre',
@@ -102,6 +119,7 @@ return [
             'created_at' => 'Fecha de registro',
             'updated_at' => 'Fecha de actualización',
             'deleted_at' => 'Fecha de eliminación',
+            'active' => 'Activo',
         ],
         'role' => [
             'name' => 'Nombre',
@@ -120,6 +138,9 @@ return [
             'tooth_id' => 'Diente',
             'patient_id' => 'Paciente',
             'user_id' => 'Doctor',
+            'details' => 'Detalles',
+            'created_at' => 'Fecha de registro',
+            'updated_at' => 'Fecha de actualización',
         ],
         'user' => [
             'name' => 'Nombre',
@@ -141,6 +162,7 @@ return [
             'created_at' => 'Fecha de registro',
             'updated_at' => 'Fecha de actualización',
             'deleted_at' => 'Fecha de eliminación',
+            'active' => 'Activo',
         ],
     ],
 ];

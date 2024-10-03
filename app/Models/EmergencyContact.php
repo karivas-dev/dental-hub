@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Maggomann\FilamentModelTranslator\Traits\HasTranslateableModel;
 
 class EmergencyContact extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasTranslateableModel;
+
+    protected static ?string $translateablePackageKey = '';
 
     /**
      * The attributes that are mass assignable.

@@ -16,8 +16,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Maggomann\FilamentModelTranslator\Traits\HasTranslateableResources;
 use Maggomann\FilamentModelTranslator\Contracts\Translateable;
+use Maggomann\FilamentModelTranslator\Traits\HasTranslateableResources;
 
 class PatientResource extends Resource implements Translateable
 {

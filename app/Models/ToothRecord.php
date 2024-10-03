@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Maggomann\FilamentModelTranslator\Traits\HasTranslateableModel;
 
 class ToothRecord extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslateableModel;
+
+    protected static ?string $translateablePackageKey = '';
 
     /**
      * The attributes that are mass assignable.

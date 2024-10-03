@@ -5,8 +5,8 @@ namespace App\Filament\Resources\PatientResource\Pages;
 use App\Enums\Kinship;
 use App\Filament\Resources\PatientResource;
 use App\Filament\Traits\TrashedFilterActive;
+use App\Helpers\TranslatableAttributes;
 use App\Models\EmergencyContact;
-use Filament\Actions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\ManageRelatedRecords;
@@ -19,23 +19,24 @@ class ManageEmergencyContacts extends ManageRelatedRecords
 {
     use TrashedFilterActive;
 
+    protected static ?string $translateablePackageKey = '';
+
     protected static string $resource = PatientResource::class;
 
     protected static string $relationship = 'emergencyContacts';
 
     protected static ?string $navigationIcon = 'hugeicons-contact-01';
 
-    public static function getNavigationLabel(): string
-    {
-        return 'Contactos de emergencia';
-    }
+    protected static ?string $title = 'Manejar contactos de emergencia';
+
+    protected static ?string $navigationLabel = 'Contactos de emergencia';
 
     public ?string $heading = 'Contactos del paciente';
 
     public function form(Form $form): Form
     {
         return $form
-            ->schema([
+            ->schema(TranslatableAttributes::translateLabels(EmergencyContact::class, [
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -52,7 +53,7 @@ class ManageEmergencyContacts extends ManageRelatedRecords
                     ->options(Kinship::options())
                     ->enum(Kinship::class)
                     ->required(),
-            ]);
+            ]));
     }
 
     public function table(Table $table): Table
@@ -60,7 +61,7 @@ class ManageEmergencyContacts extends ManageRelatedRecords
         return $table
             ->recordTitleAttribute('name')
             ->paginated(EmergencyContact::where('patient_id', $this->record->getKey())->count() > 10)
-            ->columns([
+            ->columns(TranslatableAttributes::translateLabels(EmergencyContact::class, [
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('kinship'),
                 Tables\Columns\TextColumn::make('phone'),
@@ -77,9 +78,9 @@ class ManageEmergencyContacts extends ManageRelatedRecords
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            ]))
             ->filters([
-                Tables\Filters\TrashedFilter::make()
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
@@ -96,8 +97,10 @@ class ManageEmergencyContacts extends ManageRelatedRecords
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])
-            ->modifyQueryUsing(fn (Builder $query) => $query->withoutGlobalScopes([
+            ->modifyQueryUsing(fn(Builder $query) => $query->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]));
+            ]))
+            ->modelLabel(fn() => strtolower(trans_choice('filament-model.models.emergency_contact', 1)))
+            ->pluralModelLabel(fn() => strtolower(trans_choice('filament-model.models.emergency_contact', 2)));
     }
 }

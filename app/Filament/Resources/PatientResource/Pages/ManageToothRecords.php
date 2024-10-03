@@ -3,15 +3,13 @@
 namespace App\Filament\Resources\PatientResource\Pages;
 
 use App\Filament\Resources\PatientResource;
+use App\Helpers\TranslatableAttributes;
 use App\Models\ToothRecord;
-use Filament\Actions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ManageToothRecords extends ManageRelatedRecords
 {
@@ -19,19 +17,18 @@ class ManageToothRecords extends ManageRelatedRecords
 
     protected static string $relationship = 'toothRecords';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'hugeicons-dental-broken-tooth';
 
-    public static function getNavigationLabel(): string
-    {
-        return 'Tooth Records';
-    }
+    protected static ?string $navigationLabel = 'Expedientes dentales';
+    protected static ?string $title = 'Manejar expedientes dentales';
+    protected ?string $heading = 'Expedientes dentales del paciente';
 
     public function form(Form $form): Form
     {
         return $form
-            ->schema([
+            ->schema(TranslatableAttributes::translateLabels(ToothRecord::class, [
                 Forms\Components\DateTimePicker::make('date')
-                ->required(),
+                    ->required(),
 
                 Forms\Components\TextInput::make('details')
                     ->required()
@@ -40,7 +37,7 @@ class ManageToothRecords extends ManageRelatedRecords
                 Forms\Components\Select::make('tooth_id')
                     ->relationship('tooth', 'name')
                     ->required(),
-            ]);
+            ]));
     }
 
     public function table(Table $table): Table
@@ -48,7 +45,7 @@ class ManageToothRecords extends ManageRelatedRecords
         return $table
             ->recordTitleAttribute('Tooth Records')
             ->paginated(ToothRecord::where('patient_id', $this->record->getKey())->count() > 10)
-            ->columns([
+            ->columns(TranslatableAttributes::translateLabels(ToothRecord::class, [
                 Tables\Columns\TextColumn::make('date')
                     ->dateTime()
                     ->sortable(),
@@ -62,7 +59,7 @@ class ManageToothRecords extends ManageRelatedRecords
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            ]))
             ->filters([
                 //
             ])
@@ -79,6 +76,8 @@ class ManageToothRecords extends ManageRelatedRecords
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->modelLabel(fn() => strtolower(trans_choice('filament-model.models.tooth_record', 1)))
+            ->pluralModelLabel(fn() => strtolower(trans_choice('filament-model.models.tooth_record', 2)));
     }
 }

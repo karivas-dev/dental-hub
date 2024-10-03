@@ -8,7 +8,7 @@ use Filament\Resources\Pages\ViewRecord;
 class ViewPatient extends ViewRecord
 {
     protected static string $resource = PatientResource::class;
-
+    protected static ?string $navigationLabel = 'Ver paciente';
     public ?string $heading = 'Detalles del paciente';
 
     protected function getHeaderActions(): array

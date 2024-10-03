@@ -2,40 +2,41 @@
 
 namespace App\Filament\Resources\PatientResource\Pages;
 
-use App\Filament\Resources\PatientResource;
 use App\Enums\kinship;
 use App\Enums\System;
-use Closure;
-use Filament\Forms\Get;
-use Filament\Actions;
+use App\Filament\Resources\PatientResource;
+use App\Filament\Traits\TrashedFilterActive;
+use App\Helpers\TranslatableAttributes;
 use App\Models\MedicRecord;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Traits\TrashedFilterActive;
 
 class ManageMedicRecords extends ManageRelatedRecords
 {
     use TrashedFilterActive;
+
     protected static string $resource = PatientResource::class;
 
     protected static string $relationship = 'medicRecords';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $title = 'Manejar expedientes médicos';
 
-    public static function getNavigationLabel(): string
-    {
-        return 'Medic Records';
-    }
+    protected static ?string $navigationIcon = 'bi-file-medical';
+
+    protected static ?string $navigationLabel = 'Expedientes médicos';
+
+    protected ?string $heading = 'Expedientes médicos del paciente';
 
     public function form(Form $form): Form
     {
         return $form
-            ->schema([
+            ->schema(TranslatableAttributes::translateLabels(MedicRecord::class, [
                 Forms\Components\Select::make('system')
                     ->options(System::options())
                     ->enum(System::class)
@@ -45,17 +46,17 @@ class ManageMedicRecords extends ManageRelatedRecords
                 Forms\Components\Select::make('kinship')
                     ->options(Kinship::options())
                     ->enum(Kinship::class)
-                    ->required(fn (Get $get): bool => $get('hereditary'))
-                    ->hidden(fn (Get $get): bool => ! $get('hereditary')),
+                    ->required(fn(Get $get): bool => $get('hereditary'))
+                    ->hidden(fn(Get $get): bool => ! $get('hereditary')),
                 Forms\Components\TextInput::make('treatment')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('details')
                     ->required()
                     ->maxLength(255),
-                    Forms\Components\DatePicker::make('date')
+                Forms\Components\DatePicker::make('date')
                     ->required()
-            ]);
+            ]));
     }
 
     public function table(Table $table): Table
@@ -63,7 +64,7 @@ class ManageMedicRecords extends ManageRelatedRecords
         return $table
             ->recordTitleAttribute('Medic Records')
             ->paginated(MedicRecord::where('patient_id', $this->record->getKey())->count() > 10)
-            ->columns([
+            ->columns(TranslatableAttributes::translateLabels(MedicRecord::class, [
                 Tables\Columns\TextColumn::make('system'),
                 Tables\Columns\TextColumn::make('kinship')
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -84,7 +85,7 @@ class ManageMedicRecords extends ManageRelatedRecords
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            ]))
             ->filters([
                 Tables\Filters\TrashedFilter::make()
             ])
@@ -106,8 +107,10 @@ class ManageMedicRecords extends ManageRelatedRecords
                     Tables\Actions\ForceDeleteBulkAction::make(),
                 ]),
             ])
-            ->modifyQueryUsing(fn (Builder $query) => $query->withoutGlobalScopes([
+            ->modifyQueryUsing(fn(Builder $query) => $query->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]));
+            ]))
+            ->modelLabel(fn() => strtolower(trans_choice('filament-model.models.medic_record', 1)))
+            ->pluralModelLabel(fn() => strtolower(trans_choice('filament-model.models.medic_record', 2)));
     }
 }
