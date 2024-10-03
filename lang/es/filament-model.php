@@ -113,6 +113,7 @@ return [
             'municipality_id' => 'Municipio',
             'address' => 'Dirección',
             'birthdate' => 'Fecha de nacimiento',
+            'state_id' => 'Departamento',
             'municipality' => [
                 'name' => 'Municipio',
             ],

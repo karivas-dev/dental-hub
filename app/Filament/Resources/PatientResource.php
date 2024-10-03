@@ -7,6 +7,7 @@ use App\Filament\Resources\PatientResource\Pages;
 use App\Filament\Traits\TrashedFilterActive;
 use App\Helpers\TranslatableAttributes;
 use App\Models\Patient;
+use App\Models\State;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
@@ -21,7 +22,7 @@ use Maggomann\FilamentModelTranslator\Traits\HasTranslateableResources;
 
 class PatientResource extends Resource implements Translateable
 {
-    use TrashedFilterActive, HasTranslateableResources;
+    use HasTranslateableResources, TrashedFilterActive;
 
     protected static ?string $translateablePackageKey = '';
 
@@ -60,9 +61,28 @@ class PatientResource extends Resource implements Translateable
                     ->required(),
                 Forms\Components\DatePicker::make('birthdate')
                     ->required(),
+                Forms\Components\Select::make('state_id')
+                    ->label('Departamento')
+                    ->options(State::pluck('name', 'id'))
+                    ->reactive()
+                    ->searchable()
+                    ->required()
+                    ->afterStateUpdated(function (callable $set) {
+                        $set('municipality_id', null);
+                    })
+                    ->formatStateUsing(fn(Patient $patient) => $patient->municipality?->state_id),
                 Forms\Components\Select::make('municipality_id')
-                    ->relationship('municipality', 'name')
-                    ->required(),
+                    ->required()
+                    ->options(function (callable $get) {
+                        $stateId = $get('state_id');
+                        if ($stateId) {
+                            return State::find($stateId)->municipalities->pluck('name', 'id');
+                        }
+
+                        return [];
+                    })
+                    ->searchable()
+                    ->disabled(fn(callable $get) => ! $get('state_id')),
             ]));
     }
 
@@ -156,7 +176,7 @@ class PatientResource extends Resource implements Translateable
             'edit' => Pages\EditPatient::route('/{record}/edit'),
             'emergencyContacts' => Pages\ManageEmergencyContacts::route('/{record}/emergencyContacts'),
             'medicRecords' => Pages\ManageMedicRecords::route('/{record}/medicRecords'),
-            'toothRecords' => Pages\ManageToothRecords::route('/{record}/toothRecords')
+            'toothRecords' => Pages\ManageToothRecords::route('/{record}/toothRecords'),
         ];
     }
 
@@ -167,7 +187,7 @@ class PatientResource extends Resource implements Translateable
             Pages\EditPatient::class,
             Pages\ManageEmergencyContacts::class,
             Pages\ManageMedicRecords::class,
-            Pages\ManageToothRecords::class
+            Pages\ManageToothRecords::class,
         ]);
     }
 }
