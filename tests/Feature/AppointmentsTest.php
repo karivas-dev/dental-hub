@@ -2,14 +2,12 @@
 
 use App\Filament\Resources\AppointmentResource;
 use App\Models\Appointment;
-
 use Filament\Actions\DeleteAction;
-
+use Filament\Actions\RestoreAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 
 use function Pest\Laravel\assertDatabaseHas;
-use function Pest\Laravel\assertDatabaseMissing;
-use function Pest\Laravel\assertModelMissing;
+use function Pest\Laravel\assertNotSoftDeleted;
 use function Pest\Laravel\assertSoftDeleted;
 use function Pest\Laravel\get;
 use function Pest\Livewire\livewire;
@@ -28,14 +26,7 @@ it('can create appointment', function () {
     ]);
 
     livewire(AppointmentResource\Pages\CreateAppointment::class)
-        ->fillForm([
-            'date' => $newAppointment->date,
-            'details' => $newAppointment->details,
-            'status' => $newAppointment->status,
-            'amount' => $newAppointment->amount,
-            'user_id' => $newAppointment->user_id,
-            'patient_id' => $newAppointment->patient_id,
-        ])
+        ->fillForm($newAppointment->toArray())
         ->call('create')
         ->assertHasNoFormErrors();
 
@@ -95,14 +86,7 @@ it('can update appointment', function () {
     ]);
 
     livewire(AppointmentResource\Pages\EditAppointment::class, ['record' => $appointment->getRouteKey()])
-        ->fillForm([
-            'date' => $newAppointment->date,
-            'details' => $newAppointment->details,
-            'status' => $newAppointment->status,
-            'amount' => $newAppointment->amount,
-            'user_id' => $newAppointment->user_id,
-            'patient_id' => $newAppointment->patient_id,
-        ])
+        ->fillForm($newAppointment->toArray())
         ->call('save')
         ->assertHasNoFormErrors();
 
@@ -131,5 +115,23 @@ it('can bulk delete', function () {
     livewire(AppointmentResource\Pages\ListAppointments::class)
         ->callTableBulkAction(DeleteBulkAction::class, $appointments);
 
-    $appointments->each(fn ($appointment) => assertSoftDeleted($appointment));
+    $appointments->each(fn($appointment) => assertSoftDeleted($appointment));
 });
+
+it('can restore', function () {
+    $appointment = Appointment::factory()->trashed()->create();
+
+    livewire(AppointmentResource\Pages\EditAppointment::class, ['record' => $appointment->getRouteKey()])
+        ->callAction(RestoreAction::class);
+
+    assertNotSoftDeleted($appointment);
+});
+
+//it('can bulk restore', function () {
+//    $appointments = Appointment::factory(2)->trashed()->create();
+//
+//    livewire(AppointmentResource\Pages\ListAppointments::class)
+//        ->callTableBulkAction(RestoreBulkAction::class, $appointments);
+//
+//    $appointments->each(fn($appointment) => assertNotSoftDeleted($appointment));
+//});
