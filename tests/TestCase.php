@@ -15,7 +15,6 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->refreshDatabase();
         $this->seed();
         $user = User::where('admin', '=', 0)->first();
         $this->actingAs($user);
