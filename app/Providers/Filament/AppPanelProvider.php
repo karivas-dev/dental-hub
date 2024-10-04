@@ -31,6 +31,9 @@ class AppPanelProvider extends PanelProvider
             ->spa()
             ->tenant(Clinic::class)
             ->tenantMenu(false)
+            ->tenantMiddleware([
+                ApplyTenantScopes::class,
+            ], isPersistent: true)
             ->unsavedChangesAlerts()
             ->login()
             ->colors([

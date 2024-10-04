@@ -4,8 +4,6 @@ namespace App\Models;
 
 use App\Enums\AppointmentStatus;
 use App\Traits\AuthenticatedAndNotAdmin;
-use Filament\Facades\Filament;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,20 +22,6 @@ class Appointment extends Model
     use HasFactory, HasTranslateableModel, SoftDeletes;
 
     protected static ?string $translateablePackageKey = '';
-
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        self::ApplyOnAuthenticatedAndNotAdmin(function () {
-            self::addGlobalScope(fn (Builder $query) => $query->whereHas('branch',
-                fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant())
-            ));
-            self::creating(fn (Appointment $appointment) => $appointment->branch()->associate(Auth::user()->branch));
-        });
-
-    }
-
     /**
      * The attributes that are mass assignable.
      *
@@ -52,7 +36,6 @@ class Appointment extends Model
         'patient_id',
         'branch_id',
     ];
-
     /**
      * The attributes that should be cast to native types.
      *
@@ -68,9 +51,18 @@ class Appointment extends Model
         'status' => AppointmentStatus::class,
     ];
 
-    public function patient(): BelongsTo
+    protected static function boot(): void
     {
-        return $this->belongsTo(Patient::class);
+        parent::boot();
+
+        self::ApplyOnAuthenticatedAndNotAdmin(function () {
+            self::creating(fn(Appointment $appointment) => $appointment->branch()->associate(Auth::user()->branch));
+        });
+    }
+
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(Branch::class);
     }
 
     public function user(): BelongsTo
@@ -78,9 +70,9 @@ class Appointment extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function branch(): BelongsTo
+    public function patient(): BelongsTo
     {
-        return $this->belongsTo(Branch::class);
+        return $this->belongsTo(Patient::class);
     }
 
     public function dentalServices(): BelongsToMany
