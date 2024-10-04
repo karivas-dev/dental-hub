@@ -25,7 +25,7 @@ class BranchFactory extends Factory
             'name' => $this->faker->name(),
             'main' => $this->faker->boolean(),
             'address' => $this->faker->sentence(),
-            'phone' => $this->faker->phoneNumber(),
+            'phone' => $this->faker->numerify('########'),
             'email' => $this->faker->safeEmail(),
             'clinic_id' => Clinic::factory(),
             'municipality_id' => Municipality::factory(),

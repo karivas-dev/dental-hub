@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ToothSeeder::class,
             LocationSeeder::class,
+            DentalServicesSeeder::class,
         ]);
 
         $admin = Role::create(['type' => 'Administración']);
