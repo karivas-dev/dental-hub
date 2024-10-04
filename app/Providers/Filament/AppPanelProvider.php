@@ -3,7 +3,6 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Dashboard;
-use App\Http\Middleware\ApplyTenantEvents;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Models\Clinic;
 use Filament\Http\Middleware\Authenticate;
@@ -32,10 +31,6 @@ class AppPanelProvider extends PanelProvider
             ->spa()
             ->tenant(Clinic::class)
             ->tenantMenu(false)
-            ->tenantMiddleware([
-                ApplyTenantScopes::class,
-                ApplyTenantEvents::class,
-            ], isPersistent: true)
             ->unsavedChangesAlerts()
             ->login()
             ->colors([

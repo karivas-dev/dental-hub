@@ -3,23 +3,40 @@
 namespace App\Models;
 
 use App\Enums\AppointmentStatus;
+use App\Traits\AuthenticatedAndNotAdmin;
+use Filament\Facades\Filament;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Maggomann\FilamentModelTranslator\Traits\HasTranslateableModel;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 
-
 class Appointment extends Model
 {
-    use HasFactory, SoftDeletes, HasTranslateableModel;
+    use AuthenticatedAndNotAdmin;
     use BelongsToThroughTrait;
+    use HasFactory, HasTranslateableModel, SoftDeletes;
 
     protected static ?string $translateablePackageKey = '';
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        self::ApplyOnAuthenticatedAndNotAdmin(function () {
+            self::addGlobalScope(fn (Builder $query) => $query->whereHas('branch',
+                fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant())
+            ));
+            self::creating(fn (Appointment $appointment) => $appointment->branch()->associate(Auth::user()->branch));
+        });
+
+    }
 
     /**
      * The attributes that are mass assignable.
