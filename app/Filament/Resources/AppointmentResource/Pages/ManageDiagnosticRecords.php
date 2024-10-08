@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\AppointmentResource\Pages;
 
 use App\Filament\Resources\AppointmentResource;
-use Filament\Actions;
+use App\Models\Diagnosis;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\ManageRelatedRecords;
@@ -11,7 +11,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Models\Diagnosis;
 
 class ManageDiagnosticRecords extends ManageRelatedRecords
 {
@@ -21,11 +20,17 @@ class ManageDiagnosticRecords extends ManageRelatedRecords
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    /**
+     * Get the navigation label for the diagnostic records.
+     */
     public static function getNavigationLabel(): string
     {
         return 'Diagnoses';
     }
 
+    /**
+     * Get the form schema for creating or editing a diagnosis record.
+     */
     public function form(Form $form): Form
     {
         return $form
@@ -36,19 +41,19 @@ class ManageDiagnosticRecords extends ManageRelatedRecords
             ]);
     }
 
+    /**
+     * Get the table schema for displaying diagnostic records.
+     */
     public function table(Table $table): Table
     {
         return $table
             ->recordTitleAttribute('Diagnosis Record')
-             ->paginated(Diagnosis::where('patient_id', $this->record->getKey())->count() > 10)
+            ->paginated(Diagnosis::where('patient_id', $this->record->getKey())->count() > 10)
             ->columns([
                 Tables\Columns\TextColumn::make('details'),
-
-
-
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make()
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),

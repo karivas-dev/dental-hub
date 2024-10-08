@@ -23,6 +23,9 @@ class DentalServicesRelationManager extends RelationManager implements Translate
 
     protected static string $relationship = 'dentalServices';
 
+    /**
+     * Define the table for displaying dental services related to appointments.
+     */
     public function table(Table $table): Table
     {
         return $table
@@ -33,7 +36,7 @@ class DentalServicesRelationManager extends RelationManager implements Translate
                     ->label('Quantity'),
             ]))
             ->filters([
-                //
+                // Add any filters if necessary
             ])
             ->headerActions([
                 Tables\Actions\AttachAction::make()
@@ -114,6 +117,9 @@ class DentalServicesRelationManager extends RelationManager implements Translate
             ]);
     }
 
+    /**
+     * Define the form schema for creating or editing dental services.
+     */
     public function form(Form $form): Form
     {
         return $form
