@@ -2,6 +2,7 @@
 
 use App\Filament\Resources\PatientResource;
 use App\Models\Patient;
+use Filament\Facades\Filament;
 
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertSoftDeleted;
@@ -10,6 +11,9 @@ use function Pest\Livewire\livewire;
 
 it('can render index', function () {
     get(PatientResource::getUrl('index'))->assertSuccessful();
+
+    livewire(PatientResource\Pages\ListPatients::class)
+        ->assertCanSeeTableRecords(Patient::where('clinic_id', Filament::getTenant())->limit(5)->get());
 });
 
 it('can render create', function () {

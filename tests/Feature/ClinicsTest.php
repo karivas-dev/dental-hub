@@ -19,6 +19,9 @@ beforeEach(function () {
 
 it('can render index', function () {
     get(ClinicResource::getUrl('index'))->assertSuccessful();
+
+    livewire(ClinicResource\Pages\ListClinics::class)
+        ->assertCanSeeTableRecords(Clinic::where('id', '!=', 1)->limit(5)->get());
 });
 
 it('can render create', function () {
