@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Maggomann\FilamentModelTranslator\Contracts\Translateable;
 use Maggomann\FilamentModelTranslator\Traits\HasTranslateableResources;
 
-class UserResource extends Resource IMPLEMENTS Translateable
+class UserResource extends Resource implements Translateable
 {
     use TrashedFilterActive, HasTranslateableResources;
 
@@ -27,6 +27,12 @@ class UserResource extends Resource IMPLEMENTS Translateable
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
+    /**
+     * Get the form schema for the User resource.
+     *
+     * @param  Form  $form
+     * @return Form
+     */
     public static function form(Form $form): Form
     {
         return $form
@@ -54,6 +60,12 @@ class UserResource extends Resource IMPLEMENTS Translateable
             ]));
     }
 
+    /**
+     * Get the table schema for the User resource.
+     *
+     * @param  Table  $table
+     * @return Table
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -101,6 +113,11 @@ class UserResource extends Resource IMPLEMENTS Translateable
             ]));
     }
 
+    /**
+     * Get the Eloquent query for the User resource.
+     *
+     * @return Builder
+     */
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->when(Auth::user()->admin, function ($query) {
@@ -110,6 +127,11 @@ class UserResource extends Resource IMPLEMENTS Translateable
         ]);
     }
 
+    /**
+     * Get the relationships for the User resource.
+     *
+     * @return array
+     */
     public static function getRelations(): array
     {
         return [
@@ -117,6 +139,11 @@ class UserResource extends Resource IMPLEMENTS Translateable
         ];
     }
 
+    /**
+     * Get the pages for the User resource.
+     *
+     * @return array
+     */
     public static function getPages(): array
     {
         return [

@@ -26,6 +26,12 @@ class ClinicResource extends Resource
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    /**
+     * Defines the form schema for creating or editing a clinic.
+     *
+     * @param  Form  $form  The form instance to be configured.
+     * @return Form Returns the configured form instance.
+     */
     public static function form(Form $form): Form
     {
         return $form
@@ -35,6 +41,12 @@ class ClinicResource extends Resource
             ]);
     }
 
+    /**
+     * Defines the table schema for displaying clinics.
+     *
+     * @param  Table  $table  The table instance to be configured.
+     * @return Table Returns the configured table instance.
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -75,6 +87,11 @@ class ClinicResource extends Resource
             ]));
     }
 
+    /**
+     * Retrieves the Eloquent query used for fetching records of this resource.
+     *
+     * @return Builder The Eloquent query builder instance.
+     */
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->whereNot('id', 1)
@@ -83,13 +100,23 @@ class ClinicResource extends Resource
             ]);
     }
 
+    /**
+     * Retrieves any relations associated with this resource.
+     *
+     * @return array An array of relation managers associated with this resource.
+     */
     public static function getRelations(): array
     {
         return [
-            //
+            // Add relation managers here if needed.
         ];
     }
 
+    /**
+     * Retrieves the pages associated with this resource.
+     *
+     * @return array An array of page classes associated with this resource.
+     */
     public static function getPages(): array
     {
         return [
@@ -102,6 +129,12 @@ class ClinicResource extends Resource
         ];
     }
 
+    /**
+     * Generates the sub-navigation items for the record view page.
+     *
+     * @param  Page  $page  The page instance for which to generate navigation items.
+     * @return array An array of navigation items for the record sub-navigation.
+     */
     public static function getRecordSubNavigation(Page $page): array
     {
         return $page->generateNavigationItems([

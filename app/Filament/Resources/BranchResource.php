@@ -28,11 +28,22 @@ class BranchResource extends Resource implements Translateable
 
     protected static ?string $navigationIcon = 'bi-building-add';
 
+    /**
+     * Determines if this resource should be registered in the navigation.
+     *
+     * @return bool Returns true if the authenticated user is not an admin.
+     */
     public static function shouldRegisterNavigation(): bool
     {
         return ! Auth::user()->admin;
     }
 
+    /**
+     * Defines the form schema for creating or editing a branch.
+     *
+     * @param  Form  $form  The form instance to be configured.
+     * @return Form Returns the configured form instance.
+     */
     public static function form(Form $form): Form
     {
         return $form
@@ -55,6 +66,12 @@ class BranchResource extends Resource implements Translateable
             ]));
     }
 
+    /**
+     * Defines the table schema for displaying branches.
+     *
+     * @param  Table  $table  The table instance to be configured.
+     * @return Table Returns the configured table instance.
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -106,6 +123,11 @@ class BranchResource extends Resource implements Translateable
             ]));
     }
 
+    /**
+     * Retrieves the Eloquent query used for fetching records of this resource.
+     *
+     * @return Builder The Eloquent query builder instance.
+     */
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
@@ -114,13 +136,23 @@ class BranchResource extends Resource implements Translateable
             ]);
     }
 
+    /**
+     * Retrieves any relations associated with this resource.
+     *
+     * @return array An array of relation managers associated with this resource.
+     */
     public static function getRelations(): array
     {
         return [
-            //
+            // Add relation managers here if needed.
         ];
     }
 
+    /**
+     * Retrieves the pages associated with this resource.
+     *
+     * @return array An array of page classes associated with this resource.
+     */
     public static function getPages(): array
     {
         return [

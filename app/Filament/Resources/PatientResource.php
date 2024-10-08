@@ -32,6 +32,12 @@ class PatientResource extends Resource implements Translateable
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    /**
+     * Defines the form schema for creating or editing a patient.
+     *
+     * @param  Form  $form  The form instance to be configured.
+     * @return Form Returns the configured form instance.
+     */
     public static function form(Form $form): Form
     {
         return $form
@@ -86,6 +92,12 @@ class PatientResource extends Resource implements Translateable
             ]));
     }
 
+    /**
+     * Defines the table schema for displaying patients.
+     *
+     * @param  Table  $table  The table instance to be configured.
+     * @return Table Returns the configured table instance.
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -152,6 +164,11 @@ class PatientResource extends Resource implements Translateable
             ]));
     }
 
+    /**
+     * Retrieves the Eloquent query used for fetching records of this resource.
+     *
+     * @return Builder The Eloquent query builder instance.
+     */
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
@@ -160,13 +177,23 @@ class PatientResource extends Resource implements Translateable
             ]);
     }
 
+    /**
+     * Retrieves any relations associated with this resource.
+     *
+     * @return array An array of relation managers associated with this resource.
+     */
     public static function getRelations(): array
     {
         return [
-            //
+            // Add relation managers here if needed.
         ];
     }
 
+    /**
+     * Retrieves the pages associated with this resource.
+     *
+     * @return array An array of page classes associated with this resource.
+     */
     public static function getPages(): array
     {
         return [
@@ -180,6 +207,12 @@ class PatientResource extends Resource implements Translateable
         ];
     }
 
+    /**
+     * Generates the sub-navigation items for the record view page.
+     *
+     * @param  Page  $page  The page instance for which to generate navigation items.
+     * @return array An array of navigation items for the record sub-navigation.
+     */
     public static function getRecordSubNavigation(Page $page): array
     {
         return $page->generateNavigationItems([

@@ -27,12 +27,21 @@ class AppointmentResource extends Resource implements Translateable
 
     protected static ?string $translateablePackageKey = '';
 
+    // The model associated with this resource
     protected static ?string $model = Appointment::class;
 
+    // Icon displayed in the navigation for this resource
     protected static ?string $navigationIcon = 'fluentui-document-text-clock-20-o';
 
+    // Position of the sub-navigation in the layout
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    /**
+     * Define the form schema for creating and editing appointments.
+     *
+     * @param  Form  $form  The form instance to build upon.
+     * @return Form The modified form instance.
+     */
     public static function form(Form $form): Form
     {
         return $form
@@ -69,6 +78,12 @@ class AppointmentResource extends Resource implements Translateable
             ]));
     }
 
+    /**
+     * Define the table schema for displaying appointments.
+     *
+     * @param  Table  $table  The table instance to build upon.
+     * @return Table The modified table instance.
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -110,7 +125,7 @@ class AppointmentResource extends Resource implements Translateable
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                //Tables\Actions\ViewAction::make(),
+                // Enable editing of appointments
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -121,6 +136,11 @@ class AppointmentResource extends Resource implements Translateable
             ]);
     }
 
+    /**
+     * Get the relation managers for this resource.
+     *
+     * @return array An array of relation manager classes.
+     */
     public static function getRelations(): array
     {
         return [
@@ -128,6 +148,11 @@ class AppointmentResource extends Resource implements Translateable
         ];
     }
 
+    /**
+     * Get the pages for this resource.
+     *
+     * @return array An array of page route definitions.
+     */
     public static function getPages(): array
     {
         return [
@@ -138,6 +163,11 @@ class AppointmentResource extends Resource implements Translateable
         ];
     }
 
+    /**
+     * Get the eloquent query for this resource, excluding certain global scopes.
+     *
+     * @return Builder The modified Eloquent query builder.
+     */
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
