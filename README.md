@@ -37,6 +37,12 @@ Enlace a mockups del proyecto [Enlace.](https://www.figma.com/design/C7bDqZ0y1IZ
 
 ---
 
+### **Manuales**
+- [Manual Tecnico](https://github.com/karivas-dev/dental-hub/blob/36c3091c8faf75806af7579d55bc13670625db19/Dental%20Hub%20-%20Manual%20Tecnico.pdf)
+- [Manual Administrador SaaS](https://github.com/karivas-dev/dental-hub/blob/36c3091c8faf75806af7579d55bc13670625db19/Dental%20Hub%20-%20Manual%20Administrador%20SaaS.pdf)
+- [Manual Usuario Clinica](https://github.com/karivas-dev/dental-hub/blob/36c3091c8faf75806af7579d55bc13670625db19/Dental%20Hub%20-%20Manual%20Usuario%20Clinica.pdf)
+---
+
 ### **Licencia Creative Commons**
 
 Attribution-NonCommercial-NoDerivatives (by-nc-nd)
