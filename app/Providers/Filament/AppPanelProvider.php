@@ -64,6 +64,14 @@ class AppPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->brandLogo(asset('images/DentalHub.svg'))
+            ->brandName('Dental Hub')
+            ->sidebarWidth('16rem')
+            ->brandLogoHeight('4.5rem')
+            ->favicon(asset('images/favicon.ico'))
+            ->plugins([
+                FilamentModelTranslatorServicePlugin::make(),
+            ])
             ->sidebarWidth('16rem')
             ->plugins([
                 FilamentModelTranslatorServicePlugin::make(),

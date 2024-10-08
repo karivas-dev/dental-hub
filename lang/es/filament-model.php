@@ -82,6 +82,7 @@ return [
             'created_at' => 'Fecha de registro',
             'updated_at' => 'Fecha de actualización',
             'deleted_at' => 'Fecha de eliminación',
+            'active' => 'Activo',
         ],
         'medic_record' => [
             'date' => 'Fecha',
@@ -142,6 +143,9 @@ return [
             'details' => 'Detalles',
             'created_at' => 'Fecha de registro',
             'updated_at' => 'Fecha de actualización',
+            'tooth' => [
+                'name' => 'Diente',
+            ],
         ],
         'user' => [
             'name' => 'Nombre',
