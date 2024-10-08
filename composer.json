@@ -12,6 +12,7 @@
         "filament/filament": "^3.2",
         "itsgoingd/clockwork": "^5.2",
         "laravel/framework": "^11.9",
+        "laravel/octane": "^2.5",
         "laravel/tinker": "^2.9",
         "maggomann/filament-model-translator": "^1.1",
         "ryangjchandler/blade-tabler-icons": "^2.3",
