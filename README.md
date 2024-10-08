@@ -27,6 +27,12 @@ Para construir el proyecto se ha utilizado la arquitectura MVC. Dentro de las te
 
 ---
 
+### **Despliegue a produccion**
+
+Al realizar un despliegue se recomienda utilizar Laravel Octane para mejorar el rendimiento de la aplicación. Se ha incluido un docker-compose.yml de ejemplo para facilitar el despliegue en un servidor.
+
+---
+
 ### **Link de Kanban**
 El proyecto está siendo gestionado bajo el uso de Projects de Github [Dental Hub Project.](https://github.com/users/karivas-dev/projects/9)
 
