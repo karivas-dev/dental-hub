@@ -9,6 +9,10 @@ use function Pest\Laravel\assertSoftDeleted;
 use function Pest\Laravel\get;
 use function Pest\Livewire\livewire;
 
+/**
+ * Test rendering the Patient index page.
+ * Ensures the index page can be accessed and that the table displays the correct records.
+ */
 it('can render index', function () {
     get(PatientResource::getUrl('index'))->assertSuccessful();
 
@@ -16,10 +20,19 @@ it('can render index', function () {
         ->assertCanSeeTableRecords(Patient::where('clinic_id', Filament::getTenant())->limit(5)->get());
 });
 
+/**
+ * Test rendering the Patient create page.
+ * Asserts that the create page loads successfully.
+ */
 it('can render create', function () {
     get(PatientResource::getUrl('create'))->assertSuccessful();
 });
 
+/**
+ * Test creating a new Patient.
+ * Ensures that the form can be filled and submitted successfully,
+ * and the new patient is stored in the database.
+ */
 it('can create patient', function () {
     $newPatient = Patient::factory()->make();
 
@@ -38,6 +51,10 @@ it('can create patient', function () {
     ]);
 });
 
+/**
+ * Test form input validation for creating a Patient.
+ * Ensures that required fields and validations are enforced.
+ */
 it('can validate input', function () {
     livewire(PatientResource\Pages\CreatePatient::class)
         ->fillForm([
@@ -57,22 +74,35 @@ it('can validate input', function () {
         ]);
 });
 
+/**
+ * Test rendering the Patient edit page.
+ * Asserts that the edit page loads successfully for a given patient.
+ */
 it('can render edit', function () {
     get(PatientResource::getUrl('edit', [Patient::factory()->create()]))->assertSuccessful();
 });
 
+/**
+ * Test retrieving data for editing a Patient.
+ * Ensures that the form is populated with the existing patient's data.
+ */
 it('can retrieve data', function () {
     $patient = Patient::factory()->create();
 
     livewire(PatientResource\Pages\EditPatient::class, ['record' => $patient->getRouteKey()])
         ->assertFormSet([
-            'name' => $patient->name,
+            'first_name' => $patient->first_name,
+            'last_name' => $patient->last_name,
             'email' => $patient->email,
             'phone' => $patient->phone,
             'address' => $patient->address,
         ]);
 });
 
+/**
+ * Test updating an existing Patient.
+ * Ensures that the form can be submitted successfully and the patient data is updated in the database.
+ */
 it('can update patient', function () {
     $patient = Patient::factory()->create();
     $newPatient = Patient::factory()->make();
@@ -91,6 +121,10 @@ it('can update patient', function () {
     ]);
 });
 
+/**
+ * Test soft deleting a Patient.
+ * Ensures that the delete action can be called and the patient is soft deleted.
+ */
 it('can delete', function () {
     $patient = Patient::factory()->create();
 
