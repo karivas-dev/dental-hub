@@ -10,6 +10,10 @@ use function Pest\Livewire\livewire;
 
 it('can render index', function () {
     get(UserResource::getUrl('index'))->assertSuccessful();
+    
+    livewire(UserResource\Pages\ListUsers::class)
+        ->assertCanSeeTableRecords(User::where('branch_id', Auth::user()->branch_id)->limit(5)->get())
+        ->assertCanNotSeeTableRecords(User::where('branch_id', '!=', Auth::user()->branch_id)->limit(5)->get());
 });
 
 it('can render create', function () {

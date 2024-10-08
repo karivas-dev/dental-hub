@@ -14,6 +14,10 @@ use function Pest\Livewire\livewire;
 
 it('can render index', function () {
     get(AppointmentResource::getUrl('index'))->assertSuccessful();
+
+    livewire(AppointmentResource\Pages\ListAppointments::class)
+        ->assertCanSeeTableRecords(Appointment::where('branch_id', Auth::user()->branch_id)->limit(5)->get())
+        ->assertCanNotSeeTableRecords(Appointment::where('branch_id', '!=', Auth::user()->branch_id)->limit(5)->get());
 });
 
 it('can render create', function () {
@@ -56,10 +60,6 @@ it('can validate input', function () {
             'patient_id' => 'exists',
         ]);
 });
-
-// it('can render view', function () {
-//     get(AppointmentResource::getUrl('view', [Appointment::factory()->create()]))->assertSuccessful();
-// });
 
 it('can render edit', function () {
     get(AppointmentResource::getUrl('edit', [Appointment::factory()->create()]))->assertSuccessful();

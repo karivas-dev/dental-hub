@@ -15,6 +15,10 @@ use function Pest\Livewire\livewire;
 
 it('can render index', function () {
     get(BranchResource::getUrl('index'))->assertSuccessful();
+    
+    livewire(BranchResource\Pages\ListBranches::class)
+        ->assertCanSeeTableRecords(Branch::whereBelongsTo(Filament::getTenant())->limit(5)->get())
+        ->assertCanNotSeeTableRecords(Branch::where('clinic_id', '!=', Filament::getTenant()->id)->limit(5)->get());
 });
 
 it('can render create', function () {
