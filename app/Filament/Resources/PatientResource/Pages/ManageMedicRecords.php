@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\PatientResource\Pages;
 
-use App\Enums\kinship;
+use App\Enums\Kinship;
 use App\Enums\System;
 use App\Filament\Resources\PatientResource;
 use App\Filament\Traits\TrashedFilterActive;

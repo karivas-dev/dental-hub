@@ -27,7 +27,7 @@ class ApplyTenantScopes
 
         Branch::addGlobalScope(fn(Builder $query) => $query->whereBelongsTo(Filament::getTenant()));
         User::addGlobalScope(fn(Builder $query) => $query->whereHas('branch',
-            fn(Builder $query) => $query->whereBelongsTo(Filament::getTenant())
+            fn(Builder $query) => $query->whereBelongsTo(Auth::user()->clinic)
         ));
         Patient::addGlobalScope(fn(Builder $query) => $query->whereBelongsTo(Filament::getTenant()));
         EmergencyContact::addGlobalScope(fn(Builder $query) => $query->whereHas('patient',
